@@ -13,8 +13,11 @@ dependencies {
     implementation project(':cinema-common')
     implementation project(':cinema-domain')
     implementation project(':cinema-external')
+    // thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
 }
 
 test {
