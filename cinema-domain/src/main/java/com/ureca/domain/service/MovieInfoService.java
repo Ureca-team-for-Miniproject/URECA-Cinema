@@ -4,14 +4,13 @@ import com.ureca.domain.dto.MovieInfoDTO;
 import com.ureca.domain.entity.MovieInfoEntity;
 import com.ureca.domain.repository.MovieInfoRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @Service
 public class MovieInfoService {
@@ -27,9 +26,7 @@ public class MovieInfoService {
     @Transactional
     public String makeMovieId(String genreId, Date opnDt) {
         // @Temporal Date -> LocalDate -> String format
-        LocalDate localDate = opnDt.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        LocalDate localDate = opnDt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
         // 동일한 장르와 개봉일 존재: 자동증가 숫자 3자리 확인
         String maxIndexStr = movieRepository.findMaxIdxByGenreAndOpnDt(genreId, opnDt);
@@ -44,21 +41,27 @@ public class MovieInfoService {
     // 영화 추가 (DTO-Entity 변환)
     @Transactional
     public void insertMovies(List<MovieInfoDTO> movies) {
-        List<MovieInfoEntity> entities = movies.stream().map(dto -> {
-            MovieInfoEntity entity = new MovieInfoEntity();
-            entity.setMovieId(makeMovieId(dto.getGenreId(), dto.getOpnDt()));
-            entity.setMovieNm(dto.getMovieNm());
-            entity.setMovieEnNm(dto.getMovieEnNm());
-            entity.setRtngRstrCd(dto.getRtngRstrCd());
-            entity.setDirectorNm(dto.getDirectorNm());
-            entity.setGenreNm(dto.getGenreNm());
-            entity.setGenreId(dto.getGenreId());
-            entity.setOpnDt(dto.getOpnDt());
-            entity.setEndDt(dto.getEndDt());
-            entity.setMoviePlayTime(dto.getMoviePlayTime());
-            // System.out.println("생성된 entity 객체 ID: " + entity.getMovieId());
-            return entity;
-        }).collect(Collectors.toList());
+        List<MovieInfoEntity> entities =
+                movies.stream()
+                        .map(
+                                dto -> {
+                                    MovieInfoEntity entity = new MovieInfoEntity();
+                                    entity.setMovieId(
+                                            makeMovieId(dto.getGenreId(), dto.getOpnDt()));
+                                    entity.setMovieNm(dto.getMovieNm());
+                                    entity.setMovieEnNm(dto.getMovieEnNm());
+                                    entity.setRtngRstrCd(dto.getRtngRstrCd());
+                                    entity.setDirectorNm(dto.getDirectorNm());
+                                    entity.setGenreNm(dto.getGenreNm());
+                                    entity.setGenreId(dto.getGenreId());
+                                    entity.setOpnDt(dto.getOpnDt());
+                                    entity.setEndDt(dto.getEndDt());
+                                    entity.setMoviePlayTime(dto.getMoviePlayTime());
+                                    // System.out.println("생성된 entity 객체 ID: " +
+                                    // entity.getMovieId());
+                                    return entity;
+                                })
+                        .collect(Collectors.toList());
 
         movieRepository.saveAll(entities);
         // DB 반영
