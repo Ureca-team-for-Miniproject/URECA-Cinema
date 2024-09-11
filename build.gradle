@@ -8,19 +8,6 @@ plugins {
 group = 'com.ureca'
 version = '0.0.1-SNAPSHOT'
 
-spotless {
-    java {
-        // 사용하지 않는 import 제거
-        removeUnusedImports()
-        // 구글 자바 포맷 적용
-        googleJavaFormat().aosp()
-        // 공백 제거
-        trimTrailingWhitespace()
-        // 끝부분 New Line 처리
-        endWithNewline()
-    }
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -40,6 +27,20 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'com.diffplug.spotless'
+
+    spotless {
+        java {
+            // 구글 자바 포맷 적용
+            googleJavaFormat().aosp()
+            // 사용하지 않는 import 제거
+            removeUnusedImports()
+            // 공백 제거
+            trimTrailingWhitespace()
+            // 끝부분 New Line 처리
+            endWithNewline()
+        }
+    }
 
     dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -56,5 +57,3 @@ subprojects {
         useJUnitPlatform()
     }
 }
-
-
