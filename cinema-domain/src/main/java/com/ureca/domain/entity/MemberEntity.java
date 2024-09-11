@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 @ToString(exclude = {"code"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class MemberEntity {
     @Id
     @Column(name = "id", length = 20, nullable = false)
     private String id;
@@ -43,12 +43,12 @@ public class Member {
 
     @ManyToOne
     @JoinColumn(name = "code")
-    private MembershipRank code;
+    private MembershipRankEntity code;
 
     // 빌더 패턴을 위한 생성자
     @Builder
-    public Member(String id, String password, String name, String phone, Date birth,
-                  Integer totalReservedTickets, Date lastLoginTime, Integer acmltCnt, MembershipRank code) {
+    public MemberEntity(String id, String password, String name, String phone, Date birth,
+                        Integer totalReservedTickets, Date lastLoginTime, Integer acmltCnt, MembershipRankEntity code) {
         this.id = id;
         this.password = password;
         this.name = name;

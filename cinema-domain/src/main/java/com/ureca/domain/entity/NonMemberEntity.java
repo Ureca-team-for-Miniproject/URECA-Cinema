@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 @ToString()
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NonMember {
+public class NonMemberEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT 설정
@@ -33,7 +33,7 @@ public class NonMember {
 
     // 빌더 패턴 생성자
     @Builder
-    public NonMember(String password, String name, String phone, Date birth) {
+    public NonMemberEntity(String password, String name, String phone, Date birth) {
         this.password = password;
         this.name = name;
         this.phone = phone;

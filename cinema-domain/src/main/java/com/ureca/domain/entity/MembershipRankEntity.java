@@ -11,7 +11,7 @@ import lombok.*;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MembershipRank {
+public class MembershipRankEntity {
 
     @Id
     @Column(name = "code")
@@ -25,7 +25,7 @@ public class MembershipRank {
 
     // 빌더 패턴 생성자
     @Builder
-    public MembershipRank(Integer code, String rank, Double acmltRate) {
+    public MembershipRankEntity(Integer code, String rank, Double acmltRate) {
         this.code = code;
         this.rank = rank;
         this.acmltRate = acmltRate;
