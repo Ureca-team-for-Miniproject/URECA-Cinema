@@ -1,10 +1,8 @@
 package com.ureca.domain.entity;
 
-
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.Date;
+import lombok.*;
 
 @Entity
 @Table(name = "nonMember")

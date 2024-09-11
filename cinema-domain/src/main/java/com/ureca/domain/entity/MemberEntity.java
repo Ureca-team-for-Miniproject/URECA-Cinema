@@ -1,10 +1,9 @@
 package com.ureca.domain.entity;
 
 import jakarta.persistence.*;
+import java.util.Date;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "member")
@@ -38,8 +37,8 @@ public class MemberEntity {
     private Date lastLoginTime;
 
     @Column(name = "acmltCnt")
-    @ColumnDefault("0") // 데이터베이스 기본값 설정
-    private Integer acmltCnt; // 자바 코드 기본값 설정
+    @ColumnDefault("0")
+    private Integer acmltCnt;
 
     @ManyToOne
     @JoinColumn(name = "code")
@@ -47,17 +46,25 @@ public class MemberEntity {
 
     // 빌더 패턴을 위한 생성자
     @Builder
-    public MemberEntity(String id, String password, String name, String phone, Date birth,
-                        Integer totalReservedTickets, Date lastLoginTime, Integer acmltCnt, MembershipRankEntity code) {
+    public MemberEntity(
+            String id,
+            String password,
+            String name,
+            String phone,
+            Date birth,
+            Integer totalReservedTickets,
+            Date lastLoginTime,
+            Integer acmltCnt,
+            MembershipRankEntity code) {
         this.id = id;
         this.password = password;
         this.name = name;
         this.phone = phone;
         this.birth = birth;
-        this.totalReservedTickets = totalReservedTickets != null ? totalReservedTickets : 0; // 기본값 0 설정
+        this.totalReservedTickets =
+                totalReservedTickets != null ? totalReservedTickets : 0; // 기본값 0 설정
         this.lastLoginTime = lastLoginTime;
         this.acmltCnt = acmltCnt != null ? acmltCnt : 0; // 기본값 0 설정
         this.code = code;
     }
 }
-

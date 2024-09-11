@@ -16,7 +16,7 @@ public class MembershipRankEntity {
     @Id
     @Column(name = "code")
     private Integer code;
-    
+
     @Column(name = "rank", length = 20)
     private String rank;
 

@@ -1,46 +1,41 @@
 package com.ureca.domain.entity;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.ureca.domain.repository.MemberRepository;
 import com.ureca.domain.repository.MembershipRankRepository;
+import java.util.Date;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
 class MemberTest {
 
-    @Autowired
-    private MembershipRankRepository membershipRankRepository;
+    @Autowired private MembershipRankRepository membershipRankRepository;
 
-    @Autowired
-    private MemberRepository memberRepository;
+    @Autowired private MemberRepository memberRepository;
 
     @Test
     void test() {
-        MembershipRankEntity membershipRank = MembershipRankEntity.builder()
-                .code(4)
-                .rank("VIP")
-                .acmltRate(0.1)
-                .build();
+        MembershipRankEntity membershipRank =
+                MembershipRankEntity.builder().code(4).rank("VIP").acmltRate(0.1).build();
 
         membershipRankRepository.save(membershipRank); // 먼저 저장
 
-        MemberEntity member = MemberEntity.builder()
-                .id("testUser123")
-                .password("password123")
-                .name("John Doe")
-                .phone("010-1234-5678")
-                .birth(new Date())
-                .totalReservedTickets(10)
-                .acmltCnt(5)
-                .code(membershipRank)
-                .build();
+        MemberEntity member =
+                MemberEntity.builder()
+                        .id("testUser123")
+                        .password("password123")
+                        .name("John Doe")
+                        .phone("010-1234-5678")
+                        .birth(new Date())
+                        .totalReservedTickets(10)
+                        .acmltCnt(5)
+                        .code(membershipRank)
+                        .build();
 
         // When: Member 저장
         memberRepository.save(member);

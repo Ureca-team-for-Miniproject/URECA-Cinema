@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.ureca.domain.repository")
 @EntityScan(basePackages = "com.ureca.domain.entity")
-public class TestConfiguration {
-}
+public class TestConfiguration {}
