@@ -1,8 +1,7 @@
 package com.ureca.domain.dto;
 
-import lombok.Data;
-
 import java.util.Date;
+import lombok.Data;
 
 @Data
 public class MovieInfoDTO {
@@ -21,4 +20,6 @@ public class MovieInfoDTO {
     // movieAvblYn : opnDt, endDt 기준 상영여부 계산
     private String moviePlayTime;
     // movieImgUrl, movieVideoUrl : AWS S3
+
+    // TODO : Entity to DTO Mapper
 }
