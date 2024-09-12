@@ -4,30 +4,66 @@
     <meta charset="UTF-8">
     <title>LG URECA CINEMA</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar {
+            background-color: #222;
+            color: white;
+        }
+
+        .navbar-brand {
+            color: white;
+        }
+
+        .navbar-brand:hover {
+            color: #ddd;
+        }
+
+        .search-bar {
+            width: 300px;
+            margin-left: 20px;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">URECA CINEMA</a>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <form class="form-inline ml-auto">
-            <input class="form-control mr-sm-2 search-bar" type="search" placeholder="영화 검색" aria-label="Search">
+        <form class="form-inline ml-auto" action="/cinema/home" method="get">
+            <input class="form-control mr-sm-2 search-bar" type="search" name="movieName" placeholder="영화 검색"
+                   aria-label="Search">
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">검색</button>
         </form>
+
     </div>
 </nav>
 
 <div class="container mt-5">
-    <h1>영화 INSERT DB 반영 성공</h1>
-    <h3>해야할 일</h3>
-    <ul>
-        <li>영화 중복 생성 방지</li>
-        <li>영화 ID 뒤 숫자 3자리 인덱스 자동 증가</li>
-        <li>',' 기준 장르 2개 이상일시 1개만 ID에 반영</li>
-    </ul>
+    <h1>현재 상영 영화</h1>
+    <div class="row">
+        <!-- 타임리프를 사용하여 영화 목록을 반복 렌더링 -->
+        <div class="col-md-4" th:each="movie : ${movies}">
+            <div class="card mb-4 shadow-sm">
+                <!-- <img th:src="@{${"}}" class="card-img-top" alt="영화 포스터"> -->
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${movie.movieNm}">영화 제목</h5>
+                    <p class="card-text" th:text="${movie.movieEnNm}">영화 영어 제목</p>
+                    <p class="card-text" th:text="${movie.directorNm}">감독</p>
+                    <p class="card-text" th:text="${movie.genreNm}">장르</p>
+                    <p class="card-text" th:text="${movie.opnDt}">개봉일</p>
+                    <p class="card-text" th:text="${movie.endDt}">종영일</p>
+                    <p class="card-text" th:text="${movie.moviePlayTime}">런타임</p>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">예매하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
