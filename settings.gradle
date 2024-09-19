@@ -3,4 +3,4 @@ include 'cinema-api'
 include 'cinema-domain'
 include 'cinema-common'
 include 'cinema-external'
-
+include 'cinema-batch'
