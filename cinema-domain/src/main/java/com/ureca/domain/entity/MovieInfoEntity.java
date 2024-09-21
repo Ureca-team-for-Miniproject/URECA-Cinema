@@ -1,10 +1,9 @@
 package com.ureca.domain.entity;
 
 import jakarta.persistence.*;
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "movieInfo")
@@ -26,6 +25,7 @@ public class MovieInfoEntity {
     @Column(name = "rtngRstrCd", length = 10)
     // 관람등급 AA:전체, A12:12세, A15:15세, A19:19세 이상 관람가
     private String rtngRstrCd;
+
     @Column(name = "directorNm", length = 100)
     private String directorNm;
 

@@ -2,15 +2,14 @@ package com.ureca.api.controller;
 
 import com.ureca.domain.dto.MovieInfoDTO;
 import com.ureca.domain.service.MovieInfoService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 // 영화 URL 공통 접두사 설정
 @RequestMapping("/cinema")
