@@ -1,5 +1,6 @@
 package com.ureca.domain.entity;
 
+import com.ureca.domain.dto.MemberDTO;
 import jakarta.persistence.*;
 import java.util.Date;
 import lombok.*;
@@ -66,5 +67,19 @@ public class MemberEntity {
         this.lastLoginTime = lastLoginTime;
         this.acmltCnt = acmltCnt != null ? acmltCnt : 0; // 기본값 0 설정
         this.code = code;
+    }
+
+    public MemberDTO toDTO() {
+        return MemberDTO.builder()
+                .id(id)
+                .password(password)
+                .name(name)
+                .phone(phone)
+                .birth(birth)
+                .totalReservedTickets(totalReservedTickets)
+                .lastLoginTime(lastLoginTime)
+                .acmltCnt(acmltCnt)
+                .code(code)
+                .build();
     }
 }
