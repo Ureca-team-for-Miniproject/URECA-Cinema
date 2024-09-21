@@ -4,30 +4,51 @@
     <meta charset="UTF-8">
     <title>LG URECA CINEMA</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link th:href="@{/css/movie/home.css}" rel="stylesheet"/>
+    <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="#">URECA CINEMA</a>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <form class="form-inline ml-auto">
-            <input class="form-control mr-sm-2 search-bar" type="search" placeholder="영화 검색" aria-label="Search">
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">검색</button>
-        </form>
-    </div>
-</nav>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
 
 <div class="container mt-5">
-    <h1>영화 INSERT DB 반영 성공</h1>
-    <h3>해야할 일</h3>
-    <ul>
-        <li>영화 중복 생성 방지</li>
-        <li>영화 ID 뒤 숫자 3자리 인덱스 자동 증가</li>
-        <li>',' 기준 장르 2개 이상일시 1개만 ID에 반영</li>
-    </ul>
+    <h2 class="mb-2" id="moviechart">무비차트</h2>
+    <hr class="mb-4">
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- 장르 버튼 -->
+    <div class="genre-container mb-4">
+        <button class="arrow-button arrow-left">&#9664;</button>
+        <div id="genre-buttons">
+        </div>
+        <button class="arrow-button arrow-right">&#9654;</button>
+    </div>
+
+
+    <!-- 영화 목록 -->
+    <div class="row">
+        <div class="col-md-4" th:each="movie, iterStat : ${MovieList}">
+            <a th:href="@{/cinema/movieInfo(movieId=${movie.movieId})}" class="text-decoration-none">
+                <div class="card mb-4 shadow-sm" style="cursor: pointer;">
+                    <div class="position-relative">
+                        <!-- 순위 표시 -->
+                        <span class="rank-badge" th:text="|No.${movie.rank}|"></span>
+                        <img th:src="${movie.movieImgUrl}" class="card-img-top" alt="영화 포스터">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${movie.movieNm}">영화 제목</h5>
+                        <p class="card-text" th:text="${movie.genreNm}">장르</p>
+                        <p class="card-text-small" th:text="${movie.opnDt+' 개봉'}">개봉일</p>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">예매하기</button>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
 </body>
 </html>
