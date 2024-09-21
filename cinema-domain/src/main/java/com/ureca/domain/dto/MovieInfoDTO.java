@@ -1,7 +1,8 @@
 package com.ureca.domain.dto;
 
-import java.util.Date;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class MovieInfoDTO {
