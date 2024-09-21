@@ -1,7 +1,11 @@
 package com.ureca.domain.entity;
 
+import com.ureca.domain.dto.MemberDTO;
+import com.ureca.domain.dto.NonMemberDTO;
 import jakarta.persistence.*;
+
 import java.util.Date;
+
 import lombok.*;
 
 @Entity
@@ -36,5 +40,14 @@ public class NonMemberEntity {
         this.name = name;
         this.phone = phone;
         this.birth = birth;
+    }
+
+    public NonMemberDTO toDto() {
+        return NonMemberDTO.builder()
+                .password(password)
+                .name(name)
+                .phone(phone)
+                .birth(birth)
+                .build();
     }
 }
