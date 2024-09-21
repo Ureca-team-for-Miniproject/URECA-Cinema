@@ -2,14 +2,14 @@ package com.ureca.domain.entity;
 
 import jakarta.persistence.*;
 import java.util.Date;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "movieInfo")
 @Getter
-@Setter
-// @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MovieInfoEntity {
     @Id
     @Column(name = "movieId", length = 20, unique = true, nullable = false)
@@ -39,20 +39,21 @@ public class MovieInfoEntity {
     @Temporal(TemporalType.DATE)
     private Date opnDt;
 
-    @Column(name = "endDt", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date endDt;
+    @Column(name = "moviePlot", length = 1000)
+    private String moviePlot;
 
     @Column(name = "cmltAdnc")
+    @ColumnDefault("0L")
     // 누적관객수 : Default 0
-    private Long cmltAdnc = 0L;
+    private Long cmltAdnc;
 
-    @Column(name = "movieRank")
-    private Integer movieRank;
+    @Column(name = "rank")
+    private Integer rank;
 
-    @Column(name = "movieAvblYn", nullable = false)
+    @Column(name = "movieAvlblYn", nullable = false)
+    @ColumnDefault("true")
     // 상영여부 true: 상영중(default), false: 상영종료
-    private boolean movieAvblYn = true;
+    private Boolean movieAvlblYn;
 
     @Column(name = "moviePlayTime", length = 20)
     // 상영시간 : 분 단위
@@ -64,5 +65,38 @@ public class MovieInfoEntity {
     @Column(name = "movieVideoUrl", length = 300)
     private String movieVideoUrl;
 
-    /* Builder Pattern 적용 여부 결정 -> Notion에 code 참고 */
+    // Builder 패턴 : 객체 생성
+    @Builder
+    public MovieInfoEntity(
+            String movieId,
+            String movieNm,
+            String movieEnNm,
+            String rtngRstrCd,
+            String directorNm,
+            String genreNm,
+            String genreId,
+            Date opnDt,
+            String moviePlot,
+            Long cmltAdnc,
+            Integer rank,
+            Boolean movieAvlblYn,
+            String moviePlayTime,
+            String movieImgUrl,
+            String movieVideoUrl) {
+        this.movieId = movieId;
+        this.movieNm = movieNm;
+        this.movieEnNm = movieEnNm;
+        this.rtngRstrCd = rtngRstrCd;
+        this.directorNm = directorNm;
+        this.genreNm = genreNm;
+        this.genreId = genreId;
+        this.opnDt = opnDt;
+        this.moviePlot = moviePlot;
+        this.cmltAdnc = cmltAdnc != null ? cmltAdnc : 0L;
+        this.rank = rank;
+        this.movieAvlblYn = movieAvlblYn != null ? movieAvlblYn : true;
+        this.moviePlayTime = moviePlayTime;
+        this.movieImgUrl = movieImgUrl;
+        this.movieVideoUrl = movieVideoUrl;
+    }
 }

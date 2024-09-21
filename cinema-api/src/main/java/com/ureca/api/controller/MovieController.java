@@ -1,15 +1,20 @@
 package com.ureca.api.controller;
 
-import com.ureca.domain.dto.MovieInfoDTO;
+import com.ureca.domain.dto.KmdbDetailMovieDTO;
+import com.ureca.domain.dto.ResMovieDTO;
+import com.ureca.domain.dto.ResTimeTblInfoDTO;
+import com.ureca.domain.entity.MemberEntity;
+import com.ureca.domain.entity.MovieInfoEntity;
 import com.ureca.domain.service.MovieInfoService;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
+import com.ureca.domain.service.MovieRecommendService;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 // 영화 URL 공통 접두사 설정
 @RequestMapping("/cinema")
@@ -17,47 +22,96 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MovieController {
 
     private MovieInfoService movieService;
+    private MovieRecommendService movieRecommendService;
 
-    public MovieController(MovieInfoService movieService) {
+    public MovieController(
+            MovieInfoService movieService, MovieRecommendService movieRecommendService) {
         this.movieService = movieService;
+        this.movieRecommendService = movieRecommendService;
     }
 
-    // http://localhost:8080/cinema/home
+    // (1) HOM0100 : http://localhost:8080/cinema/home
     @GetMapping("/home")
-    public String getMovies() {
-        // 임의 movieDTO 객체 리스트 생성
-        List<MovieInfoDTO> movies = new ArrayList<>();
-        MovieInfoDTO dto = new MovieInfoDTO();
-        dto.setMovieNm("파일럿");
-        dto.setMovieEnNm("Pilot");
-        dto.setRtngRstrCd("ALL");
-        dto.setDirectorNm("류준호");
-        dto.setGenreNm("액션");
-        dto.setGenreId("GACT");
-        LocalDate opnDate = LocalDate.of(2024, 9, 10);
-        Date opnLocalDate = Date.from(opnDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        dto.setOpnDt(opnLocalDate);
-        LocalDate endDate = LocalDate.of(2024, 9, 30);
-        Date endLocalDate = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        dto.setEndDt(endLocalDate);
-        dto.setMoviePlayTime("124");
-        movies.add(dto);
-
-        MovieInfoDTO dto2 = new MovieInfoDTO();
-        dto2.setMovieNm("베테랑2");
-        dto2.setMovieEnNm("I, The EXECUTIONER");
-        dto2.setRtngRstrCd("A15");
-        dto2.setDirectorNm("류승완");
-        dto2.setGenreNm("액션,범죄");
-        dto2.setGenreId("GACT,GCRI");
-        dto2.setOpnDt(opnLocalDate);
-        dto2.setEndDt(endLocalDate);
-        dto2.setMoviePlayTime("118");
-        movies.add(dto2);
-
-        movieService.insertMovies(movies);
-
-        // TODO : HOM0100 화면 구현
+    public String home(
+            @RequestParam(name = "searchWord", required = false) String searchWord,
+            @RequestParam(name = "genreName", required = false) String genreName,
+            Model model) {
+        // 검색어 X
+        if (searchWord == null || searchWord.isEmpty() || searchWord.equals("")) {
+            // 선택 장르 X
+            if (genreName == null || genreName.isEmpty() || genreName.equals("")) {
+                List<ResMovieDTO> movies = movieService.selectMovies();
+                model.addAttribute("MovieList", movies);
+                // 선택 장르 O
+            } else {
+                List<ResMovieDTO> movies = movieService.selectMovieGenreNm(genreName);
+                for (ResMovieDTO movieDTO : movies) {
+                    System.out.println(movieDTO.toString());
+                }
+                model.addAttribute("MovieList", movies);
+            }
+            // 검색어 O
+        } else {
+            List<ResMovieDTO> movie = movieService.selectMovieNm(searchWord);
+            for (ResMovieDTO movieDTO : movie) {
+                System.out.println(movieDTO.toString());
+            }
+            model.addAttribute("MovieList", movie);
+        }
         return "movie/home";
+    }
+
+    // (2) MOV0100 : http://localhost:8080/cinema/movieInfo
+    @GetMapping("/movieInfo")
+    public String movieInfo(@RequestParam String movieId, Model model) {
+        // 영화
+        ResMovieDTO movieDTO = movieService.selectMovieId(movieId);
+        System.out.println("선택한 영화: " + movieDTO.toString());
+        model.addAttribute("MovieInfo", movieDTO);
+        // 상영정보
+        List<ResTimeTblInfoDTO> timeDTOList = movieService.selectScreenId(movieDTO);
+        System.out.println("해당 상영시간: " + timeDTOList.toString());
+        model.addAttribute("TimeTblInfo", timeDTOList);
+        return "movie/movieInfo";
+    }
+
+    // all insert : http://localhost:8080/cinema/insert
+    @ResponseBody
+    @GetMapping("/insert")
+    public ResponseEntity<List<ResMovieDTO>> insertMovies() {
+        try {
+            List<ResMovieDTO> movies = movieService.KobisKmdbDTOtoEntity();
+            return ResponseEntity.ok(movies);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // one insert : http://localhost:8080/cinema/kmdb?movieName=
+    @ResponseBody
+    @GetMapping("/kmdb")
+    public ResponseEntity<KmdbDetailMovieDTO> kmdb(
+            @RequestParam(name = "movieName", required = false) String movieName)
+            throws IOException {
+        try {
+            KmdbDetailMovieDTO kmdbDto = movieService.kmdbGetDTO(movieName);
+            return ResponseEntity.ok(kmdbDto);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // update : http://localhost:8080/cinema/update
+    @PostMapping("/update")
+    public ResponseEntity<String> update() {
+        movieService.updateMovieRank();
+        return ResponseEntity.ok("누적 예매수 기준 Rank Update 성공");
+    }
+
+    // recommend
+    @ResponseBody
+    @GetMapping("/recommend")
+    public Map<MemberEntity, List<MovieInfoEntity>> recommend() {
+        return movieRecommendService.recommendAlgo();
     }
 }
