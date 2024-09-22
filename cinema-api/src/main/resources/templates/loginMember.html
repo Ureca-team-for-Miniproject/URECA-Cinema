@@ -1,0 +1,14 @@
+<form th:action="@{/cinema/login/member}" method="post" name="/cinema/login/member">
+    <div class="top">
+        <input type="email" class="form-control mb-1 p-3" name="email" id="email" placeholder="이메일을 입력해주세요."/>
+        <input type="password" class="form-control mb-1 p-3" name="password" id="password" placeholder="비밀번호를 입력해주세요"/>
+    </div>
+
+    <script th:if="${param.error}">
+        alert('아이디, 비밀번호를 확인해주세요');
+    </script>
+
+    <div class="middle d-flex flex-column">
+        <button type="submit">로그인</button>
+    </div>
+</form>

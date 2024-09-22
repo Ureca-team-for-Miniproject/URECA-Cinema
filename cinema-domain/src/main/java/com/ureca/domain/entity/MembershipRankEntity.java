@@ -1,5 +1,6 @@
 package com.ureca.domain.entity;
 
+import com.ureca.domain.dto.MemberShipRankDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,5 +30,9 @@ public class MembershipRankEntity {
         this.code = code;
         this.rank = rank;
         this.acmltRate = acmltRate;
+    }
+
+    public MemberShipRankDTO toDTO() {
+        return MemberShipRankDTO.builder().code(code).rank(rank).acmltRate(acmltRate).build();
     }
 }
