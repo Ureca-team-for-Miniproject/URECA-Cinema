@@ -1,0 +1,160 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pretendard-Bold';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+
+/* 색상 설정 */
+:root {
+    --main-color: #F2059F;
+    --dark-color: #404040;
+}
+
+body {
+    font-family: 'Pretendard-Regular';
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 영화 정보 */
+.movie-header {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center
+}
+
+.movie-img {
+    max-width: 200px;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.movie-info {
+    margin-left: 20px;
+}
+
+.movie-info h2 {
+    color: var(--main-color);
+    font-family: Pretendard-Bold;
+}
+
+.movie-info h4 {
+    color: var(--dark-color);
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+.movie-info p {
+    font-size: 0.9em;
+    color: var(--dark-color);
+}
+
+.bg-secondary {
+    color: white !important;
+    background-color: var(--main-color) !important;
+}
+
+.info-item {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+/* 줄거리 */
+.movie-plot {
+    width: 80%;
+}
+
+h5 {
+    color: var(--main-color);
+    font-weight: 600;
+}
+
+.movie-plot p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* 트레일러 */
+.movie-video {
+    width: 350px;
+    height: auto;
+    border: none;
+}
+
+/* 상영 시간표 */
+.time-table {
+    margin-top: 20px;
+}
+
+.theater-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.screen-type {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.time-slot {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    flex-direction: column;
+    width: 40%;
+}
+
+.time-slot div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time-btn {
+    background-color: white;
+    color: var(--dark-color);
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    min-width: 80px;
+    text-align: center;
+}
+
+.time-btn:hover {
+    cursor: pointer;
+    background-color: #343a40;
+    color: var(--main-color);
+}
+
+.time-btn.full {
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    color: #721c24;
+}
+
+.seat-info {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 5px;
+    text-align: center;
+}
