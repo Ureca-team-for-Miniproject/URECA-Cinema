@@ -5,6 +5,7 @@ import com.ureca.domain.entity.MembershipRankEntity;
 import com.ureca.domain.repository.MemberRepository;
 import com.ureca.domain.repository.MembershipRankRepository;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -20,24 +21,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
 
+@AllArgsConstructor
 @Configuration
 public class updateMemberRankBatch {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
     private final MemberRepository memberRepository;
     private final MembershipRankRepository membershipRankRepository;
-
-    public updateMemberRankBatch(
-            JobRepository jobRepository,
-            PlatformTransactionManager platformTransactionManager,
-            MemberRepository memberRepository,
-            MembershipRankRepository membershipRankRepository) {
-
-        this.jobRepository = jobRepository;
-        this.platformTransactionManager = platformTransactionManager;
-        this.memberRepository = memberRepository;
-        this.membershipRankRepository = membershipRankRepository;
-    }
 
     @Bean
     // Job을 정의
