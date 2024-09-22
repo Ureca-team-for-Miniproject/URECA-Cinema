@@ -18,21 +18,30 @@ public class MembershipRankEntity {
     @Column(name = "code")
     private Integer code;
 
-    @Column(name = "rank", length = 20)
-    private String rank;
+    @Column(name = "rankName", length = 20)
+    private String rankName;
 
     @Column(name = "acmltRate")
     private Double acmltRate;
 
+    @Column(name = "rank", length = 20)
+    private String rank;
+
     // 빌더 패턴 생성자
     @Builder
-    public MembershipRankEntity(Integer code, String rank, Double acmltRate) {
+    public MembershipRankEntity(Integer code, String rank, Double acmltRate, String rankName) {
         this.code = code;
         this.rank = rank;
+        this.rankName = rankName;
         this.acmltRate = acmltRate;
     }
 
     public MemberShipRankDTO toDTO() {
-        return MemberShipRankDTO.builder().code(code).rank(rank).acmltRate(acmltRate).build();
+        return MemberShipRankDTO.builder()
+                .code(code)
+                .rankName(rankName)
+                .rank(rank)
+                .acmltRate(acmltRate)
+                .build();
     }
 }
