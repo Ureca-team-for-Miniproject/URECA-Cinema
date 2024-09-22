@@ -1,11 +1,8 @@
 package com.ureca.domain.entity;
 
-import com.ureca.domain.dto.MemberDTO;
 import com.ureca.domain.dto.NonMemberDTO;
 import jakarta.persistence.*;
-
 import java.util.Date;
-
 import lombok.*;
 
 @Entity
