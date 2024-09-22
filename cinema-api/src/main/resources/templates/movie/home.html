@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LG URECA CINEMA</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link th:href="@{/css/movie/home.css}" rel="stylesheet"/>
+    <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
+
+<div class="container mt-5">
+    <h2 class="mb-2" id="moviechart">무비차트</h2>
+    <hr class="mb-4">
+
+    <!-- 장르 버튼 -->
+    <div class="genre-container mb-4">
+        <button class="arrow-button arrow-left">&#9664;</button>
+        <div id="genre-buttons">
+        </div>
+        <button class="arrow-button arrow-right">&#9654;</button>
+    </div>
+
+
+    <!-- 영화 목록 -->
+    <div class="row">
+        <div class="col-md-4" th:each="movie, iterStat : ${MovieList}">
+            <a th:href="@{/cinema/movieInfo(movieId=${movie.movieId})}" class="text-decoration-none">
+                <div class="card mb-4 shadow-sm" style="cursor: pointer;">
+                    <div class="position-relative">
+                        <!-- 순위 표시 -->
+                        <span class="rank-badge" th:text="|No.${movie.rank}|"></span>
+                        <img th:src="${movie.movieImgUrl}" class="card-img-top" alt="영화 포스터">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${movie.movieNm}">영화 제목</h5>
+                        <p class="card-text" th:text="${movie.genreNm}">장르</p>
+                        <p class="card-text-small" th:text="${movie.opnDt+' 개봉'}">개봉일</p>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">예매하기</button>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[URECA CINEMA] 취향에 맞는 영화를 가져왔어요 ✨</title>
+</head>
+
+
+<body style="font-family: Pretendard-Regular">
+<div class="container mt-5">
+    <p> 본 메일은 휴면 상태로 전환된 회원님에게 발송되는 메일입니다💌 </p>
+    <br>
+    <h4> 📢이번주, 고객님의 취향에 맞는 다양한 영화가 현재 상영 중이에요! </h4>
+    <br>
+    <h3 style="margin-top: 20px;">🕹️ 인기 영화 추천</h3>
+    <hr style="margin: 5px 0px; width: 30%;">
+    <div class="movie-container" style="display: flex; flex-wrap: wrap;">
+        <div th:each="movie, iterStat : ${MovieList}" class="movie" th:if="${iterStat.index < 4}"
+             style="margin: 10px; text-align: center;">
+            <img th:src="${movie.movieImgUrl}" th:alt="${movie.movieNm}" style="max-width: 150px; height:auto;"/>
+            <h5 th:text="${movie.movieNm}">영화명</h5>
+            <p th:text="${movie.genreNm}">장르</p>
+        </div>
+    </div>
+    <div th:if="${#lists.size(MovieList) > 4}" style="margin-bottom: 60px;">
+        <br><br>
+        <h3 style="margin-top: 20px; width: 30%;"> 🪄 취향저격 영화 추천</h3>
+        <hr style="margin: 5px 0px;">
+        <div class="movie-container" style="display: flex; flex-wrap: wrap;">
+            <div th:each="movie, iterStat : ${MovieList}" class="movie" th:if="${iterStat.index >= 4}"
+                 style="margin: 10px; text-align: center;">
+                <img th:src="${movie.movieImgUrl}" th:alt="${movie.movieNm}" style="max-width: 150px; height:auto;"/>
+                <h5 th:text="${movie.movieNm}">영화명</h5>
+                <p th:text="${movie.genreNm}">장르</p>
+            </div>
+        </div>
+    </div>
+
+    <h4> 더 많은 영화를 보고 싶다면? </h4>
+    <p><a href="http://localhost:8080/cinema/home">🌸URECA CINEMA🌸</a></p>
+</div>
+
+</body>
+</html>

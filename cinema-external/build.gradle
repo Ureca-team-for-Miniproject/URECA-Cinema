@@ -11,8 +11,15 @@ repositories {
 
 dependencies {
     implementation project(':cinema-common')
+    implementation project(':cinema-domain')
+    // kmdb open api
+    implementation files('libs/kobis-opcl-rest-v1.0.jar')
+    // json
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    // mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 test {

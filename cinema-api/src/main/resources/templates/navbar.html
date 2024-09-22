@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<th:block th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="home">URECA CINEMA</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <form class="form-inline ml-auto" action="/cinema/home" method="get">
+                <input class="form-control mr-sm-2 search-bar" type="search" name="searchWord" placeholder="영화 검색"
+                       aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">검색</button>
+            </form>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/cinema/login">로그인</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cinema/anonymous-login">비회원 로그인</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cinema/register">회원가입</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cinema/mypage">마이페이지</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="/cinema/anonymous-mypage">비회원 마이페이지</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</th:block>
+</body>
+</html>
