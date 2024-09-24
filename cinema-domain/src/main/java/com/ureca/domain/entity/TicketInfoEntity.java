@@ -15,7 +15,7 @@ public class TicketInfoEntity {
 
     @Id
     @Column(name = "ticketId", length = 30, nullable = false)
-    private String ticketId;
+    private int ticketId;
 
     @Column(name = "userId", length = 20, nullable = false)
     private String userId;
@@ -39,7 +39,7 @@ public class TicketInfoEntity {
 
     @Builder
     public TicketInfoEntity(
-            String ticketId,
+            int ticketId,
             ScreenInfoEntity scrnnId,
             String userId,
             int seatNum,
