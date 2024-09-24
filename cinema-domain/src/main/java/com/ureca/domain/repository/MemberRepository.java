@@ -15,5 +15,5 @@ public interface MemberRepository extends JpaRepository<MemberEntity, String> {
 
     // 휴면회원 리스트 조회
     @Query("select m from MemberEntity m where m.lastLoginTime < :oneYearAgo and m.isInactive = false")
-    List<MemberEntity> findSleeperMembers(@Param("oneYearAgo") LocalDate oneYearAgo);
+    Page<MemberEntity> findSleeperMembers(@Param("oneYearAgo") LocalDate oneYearAgo, Pageable pageable);
 }
