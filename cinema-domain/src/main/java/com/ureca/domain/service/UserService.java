@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +28,13 @@ public class UserService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final NonMemberRepository nonMemberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public void registerMember(RegisterDTO registerDTO) {
         try {
+            String encodePassword = bCryptPasswordEncoder.encode(registerDTO.getPassword());
+            registerDTO.setPassword(encodePassword);
             memberRepository.save(registerDTO.toEntity());
         } catch (Exception e) {
             throw new RuntimeException("회원가입 중 오류가 발생했습니다: " + e.getMessage(), e);
@@ -61,7 +65,6 @@ public class UserService implements UserDetailsService {
                     .authorities(grantedAuthorities)
                     .build();
         }
-
         throw new UsernameNotFoundException("유저를 찾을 수 없습니다.");
     }
 }
