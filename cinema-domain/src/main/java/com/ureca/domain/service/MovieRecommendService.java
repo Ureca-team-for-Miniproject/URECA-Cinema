@@ -5,14 +5,12 @@ import com.ureca.domain.entity.MovieInfoEntity;
 import com.ureca.domain.repository.MemberRepository;
 import com.ureca.domain.repository.MovieInfoRepository;
 import com.ureca.domain.repository.TicketInfoRepository;
-import java.time.LocalDate;
 import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MovieRecommendService {
 
-    private MemberRepository memberRepository;
     private TicketInfoRepository ticketInfoRepository;
     private MovieInfoRepository movieInfoRepository;
 
@@ -20,16 +18,17 @@ public class MovieRecommendService {
             MemberRepository memberRepository,
             TicketInfoRepository ticketInfoRepository,
             MovieInfoRepository movieInfoRepository) {
-        this.memberRepository = memberRepository;
         this.ticketInfoRepository = ticketInfoRepository;
         this.movieInfoRepository = movieInfoRepository;
     }
 
     // 최종 추천로직 : <사용자, 인기순(4개)+장르순(<=4개) 영화목록> return
-    public Map<MemberEntity, List<MovieInfoEntity>> recommendAlgo() {
-        Map<MemberEntity, List<MovieInfoEntity>> memberMovieMap = new HashMap<>();
+    public Map<MemberEntity, List<MovieInfoEntity>> recommendAlgo(
+            List<MemberEntity> sleeperMember) {
         // 1. 휴면회원
-        List<MemberEntity> sleeperMember = getSleeperMembers();
+        // sleeperMember
+        Map<MemberEntity, List<MovieInfoEntity>> memberMovieMap = new HashMap<>();
+
         // 회원별
         for (MemberEntity member : sleeperMember) {
             // 4. 인기영화 추가
@@ -46,11 +45,7 @@ public class MovieRecommendService {
         return memberMovieMap;
     }
 
-    // 1. 휴면회원 찾기
-    public List<MemberEntity> getSleeperMembers() {
-        LocalDate oneYearAgo = LocalDate.now().minusYears(1);
-        return memberRepository.findSleeperMembers(oneYearAgo);
-    }
+    //    // 1. 휴면회원 찾기
 
     // 2. 사용자별 예매내역 확인 : 미존재시 null, 존재시 Map (장르, count) return
     public Map<String, Integer> getGenreCounts(String userId) {
