@@ -6,23 +6,27 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+// 예매 정보
 @Entity
 @Table(name = "reservationInfo")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationInfoEntity {
 
+    // 예매 아이디
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rsrvId")
     private Integer rsrvId;
 
-    @ManyToOne
-    @JoinColumn(name = "ticketId", insertable = false, updatable = false)
+    // 티켓 아이디
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticketId")
     private TicketInfoEntity ticketId;
 
-    @ManyToOne
-    @JoinColumn(name = "seatId", insertable = false, updatable = false)
+    // 좌석 아이디
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seatId")
     private SeatInfoEntity seatId;
 
     @Builder
