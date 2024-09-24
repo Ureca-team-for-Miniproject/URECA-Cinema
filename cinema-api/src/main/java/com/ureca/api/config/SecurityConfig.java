@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
@@ -20,7 +22,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName("_csrf");
+        return http.csrf(
+                        csrf ->
+                                csrf.csrfTokenRequestHandler(requestHandler)
+                                        .csrfTokenRepository(
+                                                CookieCsrfTokenRepository.withHttpOnlyFalse())
+                                        .ignoringRequestMatchers(
+                                                "/cinema/home", "/cinema/login/**", "/cinema/join"))
+                .authorizeHttpRequests(
                         (authorizeHttpRequests) ->
                                 authorizeHttpRequests
                                         .requestMatchers(new AntPathRequestMatcher("/cinema/movie"))
@@ -33,7 +44,7 @@ public class SecurityConfig {
                                         .loginPage("/cinema/login/member")
                                         .usernameParameter("email")
                                         .passwordParameter("password")
-                                        .defaultSuccessUrl("/cinema/home")
+                                        .defaultSuccessUrl("/cinema/home", true)
                                         .permitAll())
                 .logout(
                         (logout) ->
