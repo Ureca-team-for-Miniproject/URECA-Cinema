@@ -41,6 +41,10 @@ public class MemberEntity {
     @ColumnDefault("0")
     private Integer acmltCnt;
 
+    @Column(name = "isInactive", nullable = false)
+    @ColumnDefault("false")
+    private boolean isInactive; // 추가된 필드
+
     @ManyToOne
     @JoinColumn(name = "code")
     private MembershipRankEntity code;
@@ -56,6 +60,7 @@ public class MemberEntity {
             Integer totalReservedTickets,
             Date lastLoginTime,
             Integer acmltCnt,
+            boolean isInactive,
             MembershipRankEntity code) {
         this.id = id;
         this.password = password;
@@ -66,6 +71,7 @@ public class MemberEntity {
                 totalReservedTickets != null ? totalReservedTickets : 0; // 기본값 0 설정
         this.lastLoginTime = lastLoginTime;
         this.acmltCnt = acmltCnt != null ? acmltCnt : 0; // 기본값 0 설정
+        this.isInactive = isInactive;
         this.code = code;
     }
 
