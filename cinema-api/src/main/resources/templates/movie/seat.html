@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>영화 상영관 좌석 선택</title>
+    <style>
+        /* 기존 CSS 코드 유지 */
+        .seat {
+            width: 30px; /* 버튼의 너비를 줄임 */
+            height: 20px; /* 버튼의 높이를 줄임 */
+            display: inline-block;
+            margin: 2px; /* 버튼 간격을 줄임 */
+            cursor: not-allowed; /* 초기 상태에서 커서 모양 변경 */
+            text-align: center;
+            line-height: 20px; /* 숫자가 버튼의 중앙에 오도록 설정 */
+            border: 1px solid #ccc;
+            font-size: 10px; /* 폰트 크기를 줄임 */
+        }
+        .seat.selected {
+            border: 2px solid #4CAF50;
+            background-color: #c8e6c9;
+            cursor: pointer; /* 선택 가능한 상태로 커서 변경 */
+        }
+        .seat.reserved {
+            cursor: not-allowed;
+            background-color: #f44336;
+            color: white;
+        }
+        .seat.type-R {
+            background-color: #ffeb3b; /* 노란색 */
+            color: black;
+        }
+        .seat.type-C {
+            background-color: #f48fb1; /* 핑크색 */
+            color: black;
+        }
+        .seat.type-S {
+            background-color: #e0e0e0; /* 기본 좌석 색상 */
+            color: black;
+        }
+        .row {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .row-label {
+            display: inline-block;
+            width: 30px; /* 행 번호의 너비를 줄임 */
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px; /* 영어 행 번호의 폰트 크기 조정 */
+        }
+        .seat-container {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+        .screen {
+            text-align: center;
+            font-weight: bold;
+            margin: 10px 0; /* 상하 여백 조정 */
+            padding: 5px; /* 패딩 조정 */
+            background-color: #777; /* 스크린 배경색을 옅게 조정 */
+            color: white;
+            font-size: 12px; /* 글자 크기를 줄임 */
+            border-radius: 5px;
+            height: 18px; /* 스크린 높이 좁게 조정 */
+            line-height: 18px; /* 스크린 텍스트 수직 중앙 정렬 */
+            width: calc(30px * 13 + 35px); /* 30px (좌석 너비) * 12 (열 수) + 2px * 11 (좌석 간격) */
+        }
+        .selected-seats {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .selected-seats h2 {
+            margin-top: 0;
+        }
+        .confirm-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .confirm-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .movie-info {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .movie-info h2, .movie-info h3 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<h1>영화 상영관 좌석 선택</h1>
+
+<!-- 영화 정보 표시 -->
+<div class="movie-info">
+    <h2 th:text="'영화명: ' + ${ResSeatDTO.movieNm}"></h2>
+    <h3 th:text="'상영관: ' + ${ResSeatDTO.theaterNm}"></h3>
+    <h3 th:text="'상영방식: ' + ${ResSeatDTO.theaterCd}"></h3>
+    <h3 th:text="'사용자 적립금: ' + ${ResSeatDTO.useAcmltCnt} + '원'"></h3>
+</div>
+
+<!-- 인원 수 선택 -->
+<div>
+    <label for="numOfPeople">선택할 인원 수: </label>
+    <select id="numOfPeople">
+        <option value="0">선택</option>
+        <option value="1">1명</option>
+        <option value="2">2명</option>
+        <option value="3">3명</option>
+        <option value="4">4명</option>
+        <option value="5">5명</option>
+    </select>
+</div>
+
+<!-- 스크린 영역 추가 -->
+<div class="screen">SCREEN</div>
+
+<div id="seats">
+    <!-- 행 A부터 J까지, 각 행에 12개의 좌석 배치 -->
+    <div th:each="rowIndex : ${#numbers.sequence(0, 9)}" class="row">
+        <!-- 행 번호를 영어로 표시 -->
+        <span class="row-label">
+            <span th:if="${rowIndex == 0}">A</span>
+            <span th:if="${rowIndex == 1}">B</span>
+            <span th:if="${rowIndex == 2}">C</span>
+            <span th:if="${rowIndex == 3}">D</span>
+            <span th:if="${rowIndex == 4}">E</span>
+            <span th:if="${rowIndex == 5}">F</span>
+            <span th:if="${rowIndex == 6}">G</span>
+            <span th:if="${rowIndex == 7}">H</span>
+            <span th:if="${rowIndex == 8}">I</span>
+            <span th:if="${rowIndex == 9}">J</span>
+        </span>
+        <!-- 열 번호를 12개로 가로 배치 -->
+        <div class="seat-container">
+            <div th:each="colIndex : ${#numbers.sequence(1, 12)}">
+                <button class="seat"
+                        th:data-row="${rowIndex == 0 ? 'A' :
+                                         rowIndex == 1 ? 'B' :
+                                         rowIndex == 2 ? 'C' :
+                                         rowIndex == 3 ? 'D' :
+                                         rowIndex == 4 ? 'E' :
+                                         rowIndex == 5 ? 'F' :
+                                         rowIndex == 6 ? 'G' :
+                                         rowIndex == 7 ? 'H' :
+                                         rowIndex == 8 ? 'I' :
+                                         'J'}"
+                        th:data-col="${colIndex}"
+                        th:text="${colIndex}"
+                        th:classappend="${(rowIndex == 0 && colIndex == 11) || (rowIndex == 0 && colIndex == 12) ? ' type-R' :
+                                         (rowIndex == 9 && (colIndex >= 5 && colIndex <= 8)) ? ' type-C' :
+                                         ' type-S'}"
+                        th:onclick="'toggleSeatSelection(this)'"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 선택한 좌석 표시 영역 -->
+<div class="selected-seats" id="selectedSeats">
+    <h2>선택한 좌석</h2>
+    <div id="seatList">선택한 좌석이 없습니다.</div>
+</div>
+
+<!-- 적립금 사용 여부 및 금액 입력 -->
+<div class="selected-seats">
+    <h2>적립금 사용</h2>
+    <label>
+        <input type="checkbox" id="usePoints"> 적립금 사용
+    </label>
+    <div id="pointsSection" style="display: none;">
+        <label for="pointsAmount">사용할 적립금: </label>
+        <input type="number" id="pointsAmount" min="0" max="5000" value="0"> 원
+    </div>
+</div>
+
+<!-- 좌석 선택 완료 버튼 -->
+<button class="confirm-button" id="confirmSeats" onclick="confirmSeats()" disabled>좌석 선택 완료</button>
+
+<script>
+    let selectedSeats = [];
+    let maxSeats = 0;
+    let pointsUsed = 0;
+    const MAX_POINTS = 5000;
+
+    // 좌석 가격 정의
+    const seatPrices = {
+        'S': 11000,
+        'R': 9000,
+        'C': 13000
+    };
+
+    function updateSeatLimit() {
+        maxSeats = parseInt(document.getElementById('numOfPeople').value, 10);
+        selectedSeats = [];
+        document.querySelectorAll('.seat').forEach(seat => {
+            seat.classList.remove('selected');
+            seat.style.cursor = maxSeats > 0 ? 'pointer' : 'not-allowed'; // 좌석 버튼 상태 변경
+        });
+        updateSelectedSeatsDisplay();
+        document.getElementById('confirmSeats').disabled = maxSeats === 0;
+    }
+
+    function toggleSeatSelection(element) {
+        if (maxSeats === 0) return; // 인원 수가 선택되지 않은 경우 좌석 선택 비활성화
+
+        const seat = element;
+        const row = seat.getAttribute('data-row');
+        const col = parseInt(seat.getAttribute('data-col'), 10);
+        const seatIdentifier = `행: ${row}, 열: ${col}`;
+        const seatType = seat.classList.contains('type-C') ? 'C' : (seat.classList.contains('type-R') ? 'R' : 'S');
+        const adjacentSeats = [];
+
+        if (seatType === 'C') {
+            if (col < 12) {
+                const nextSeat = document.querySelector(`.seat[data-row="${row}"][data-col="${col + 1}"]`);
+                if (nextSeat && !nextSeat.classList.contains('reserved')) {
+                    adjacentSeats.push(nextSeat);
+                }
+            }
+            if (seat.classList.contains('selected')) {
+                // 자동으로 선택된 좌석 해제
+                seat.classList.remove('selected');
+                adjacentSeats.forEach(nextSeat => nextSeat.classList.remove('selected'));
+                selectedSeats = selectedSeats.filter(s => s !== seatIdentifier && s !== `행: ${row}, 열: ${col + 1}`);
+            } else {
+                // 자동으로 선택할 좌석 체크
+                if (adjacentSeats.length === 1 && selectedSeats.length + 2 <= maxSeats) {
+                    seat.classList.add('selected');
+                    adjacentSeats[0].classList.add('selected');
+                    selectedSeats.push(seatIdentifier, `행: ${row}, 열: ${col + 1}`);
+                } else {
+                    alert('연속된 2개의 좌석을 자동으로 선택할 수 있습니다.');
+                    return;
+                }
+            }
+        } else {
+            if (seat.classList.contains('selected')) {
+                // 일반 좌석의 선택 해제
+                seat.classList.remove('selected');
+                selectedSeats = selectedSeats.filter(s => s !== seatIdentifier);
+            } else {
+                // 일반 좌석의 선택
+                if (selectedSeats.length >= maxSeats) {
+                    alert('선택할 수 있는 좌석 수를 초과했습니다.');
+                    return;
+                }
+                seat.classList.add('selected');
+                if (!selectedSeats.includes(seatIdentifier)) {
+                    selectedSeats.push(seatIdentifier);
+                }
+            }
+        }
+
+        updateSelectedSeatsDisplay();
+    }
+
+    function updateSelectedSeatsDisplay() {
+        const seatList = document.getElementById('seatList');
+        const totalPrice = selectedSeats.reduce((total, seatIdentifier) => {
+            const [row, col] = seatIdentifier.split(', ').map(part => part.split(': ')[1]);
+            const seatElement = document.querySelector(`.seat[data-row="${row}"][data-col="${col}"]`);
+            const seatType = seatElement.classList.contains('type-C') ? 'C' : (seatElement.classList.contains('type-R') ? 'R' : 'S');
+            return total + seatPrices[seatType];
+        }, 0);
+
+        let discountedPrice = totalPrice;
+        if (document.getElementById('usePoints').checked) {
+            pointsUsed = parseInt(document.getElementById('pointsAmount').value, 10);
+            pointsUsed = Math.min(pointsUsed, MAX_POINTS);
+            discountedPrice = Math.max(totalPrice - pointsUsed, 0);
+        } else {
+            pointsUsed = 0;
+        }
+
+        if (selectedSeats.length > 0) {
+            const seatDetails = selectedSeats.map(seatIdentifier => {
+                const [row, col] = seatIdentifier.split(', ').map(part => part.split(': ')[1]);
+                const seatElement = document.querySelector(`.seat[data-row="${row}"][data-col="${col}"]`);
+                const seatType = seatElement.classList.contains('type-C') ? 'C' : (seatElement.classList.contains('type-R') ? 'R' : 'S');
+                return `좌석: ${seatIdentifier} - ${seatPrices[seatType].toLocaleString()}원`;
+            }).join('<br/>');
+            seatList.innerHTML = `${seatDetails}<br/><strong>총 합계: ${totalPrice.toLocaleString()}원</strong><br/><strong>적립금 사용: ${pointsUsed.toLocaleString()}원</strong><br/><strong>할인된 총 합계: ${discountedPrice.toLocaleString()}원</strong>`;
+        } else {
+            seatList.innerHTML = '선택한 좌석이 없습니다.';
+        }
+    }
+
+    function confirmSeats() {
+        if (selectedSeats.length === maxSeats) {
+            const seatListText = selectedSeats.map(seatIdentifier => {
+                const [row, col] = seatIdentifier.split(', ').map(part => part.split(': ')[1]);
+                const seatElement = document.querySelector(`.seat[data-row="${row}"][data-col="${col}"]`);
+                const seatType = seatElement.classList.contains('type-C') ? 'C' : (seatElement.classList.contains('type-R') ? 'R' : 'S');
+                const price = seatPrices[seatType].toLocaleString();
+                return `좌석: ${seatIdentifier} - ${price}원`;
+            }).join('<br/>');
+
+            const totalPrice = selectedSeats.reduce((total, seatIdentifier) => {
+                const [row, col] = seatIdentifier.split(', ').map(part => part.split(': ')[1]);
+                const seatElement = document.querySelector(`.seat[data-row="${row}"][data-col="${col}"]`);
+                const seatType = seatElement.classList.contains('type-C') ? 'C' : (seatElement.classList.contains('type-R') ? 'R' : 'S');
+                return total + seatPrices[seatType];
+            }, 0);
+
+            const discountedPrice = Math.max(totalPrice - pointsUsed, 0);
+
+            const confirmMessage = `선택한 좌석:\n\n${seatListText}<br/><br/><strong>총 합계: ${totalPrice.toLocaleString()}원</strong><br/><strong>적립금 사용: ${pointsUsed.toLocaleString()}원</strong><br/><strong>할인된 총 합계: ${discountedPrice.toLocaleString()}원</strong><br/><br/>정말 좌석 선택을 완료하시겠습니까?`;
+
+            if (confirm(confirmMessage)) {
+                const seatData = selectedSeats.map(seatIdentifier => {
+                    const [row, col] = seatIdentifier.split(', ').map(part => part.split(': ')[1]);
+                    const seatElement = document.querySelector(`.seat[data-row="${row}"][data-col="${col}"]`);
+                    const seatType = seatElement.classList.contains('type-C') ? 'C' : (seatElement.classList.contains('type-R') ? 'R' : 'S');
+                    return {
+                        seatId: seatElement.getAttribute('data-row') + seatElement.getAttribute('data-col'),
+                        seatRow: row,
+                        seatCol: parseInt(col, 10),
+                        seatType: seatType
+                    };
+                });
+
+                const seatSaveDTO = {
+                    seatList: seatData,
+                    useAcmltCnt: pointsUsed,
+                    pymnAmnt: discountedPrice
+                };
+
+                fetch('http://localhost:8080/cinema/submitSeats', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(seatSaveDTO),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.ticketId) {
+                            // 티켓 ID가 반환되면 이동
+                            window.location.href = `http://localhost:8080/cinema/ticket?ticketId=${data.ticketId}`;
+                        } else {
+                            alert('이미 예매된 좌석입니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('좌석 예약에 실패했습니다.');
+                    });
+            }
+        } else {
+            alert(`선택된 좌석 수와 인원 수가 일치하지 않습니다.\n선택된 좌석 수: ${selectedSeats.length}\n총 인원 수: ${maxSeats}`);
+        }
+    }
+
+    document.getElementById('numOfPeople').addEventListener('change', updateSeatLimit);
+    document.getElementById('usePoints').addEventListener('change', function() {
+        document.getElementById('pointsSection').style.display = this.checked ? 'block' : 'none';
+        updateSelectedSeatsDisplay();
+    });
+    document.getElementById('pointsAmount').addEventListener('input', updateSelectedSeatsDisplay);
+</script>
+</body>
+</html>

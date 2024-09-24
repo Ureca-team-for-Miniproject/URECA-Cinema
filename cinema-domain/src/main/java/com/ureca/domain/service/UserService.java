@@ -2,6 +2,7 @@ package com.ureca.domain.service;
 
 import com.ureca.common.model.Role;
 import com.ureca.domain.dto.NonMemberDTO;
+import com.ureca.domain.dto.RegisterDTO;
 import com.ureca.domain.entity.MemberEntity;
 import com.ureca.domain.repository.MemberRepository;
 import com.ureca.domain.repository.NonMemberRepository;
@@ -26,6 +27,15 @@ public class UserService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final NonMemberRepository nonMemberRepository;
+
+    @Transactional
+    public void registerMember(RegisterDTO registerDTO) {
+        try {
+            memberRepository.save(registerDTO.toEntity());
+        } catch (Exception e) {
+            throw new RuntimeException("회원가입 중 오류가 발생했습니다: " + e.getMessage(), e);
+        }
+    }
 
     @Transactional
     public void nonMemberLogin(NonMemberDTO nonMemberDTO) {
