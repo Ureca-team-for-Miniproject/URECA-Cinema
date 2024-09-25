@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 </head>
 <body>
@@ -13,20 +13,22 @@
                 <button class="btn btn-outline-light my-2 my-sm-0" type="submit">검색</button>
             </form>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
+                <!-- 로그인하지 않은 사용자에게만 표시 -->
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" href="/cinema/login/member">로그인</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" href="/cinema/login/nonmember">비회원 로그인</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" href="/cinema/join">회원가입</a>
                 </li>
-                <li class="nav-item">
+                <!-- 로그인한 사용자에게만 표시 -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" href="/cinema/mypage">마이페이지</a>
                 </li>
-                <li class="nav-item">
-                <a class="nav-link" href="/cinema/anonymous-mypage">비회원 마이페이지</a>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/cinema/home">로그아웃</a>
                 </li>
             </ul>
         </div>
