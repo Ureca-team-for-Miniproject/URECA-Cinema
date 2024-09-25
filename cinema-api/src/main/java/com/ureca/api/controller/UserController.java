@@ -32,7 +32,7 @@ public class UserController {
                 MemberDTO memberInfo = userService.getMemberInfo(user.getUsername());
                 model.addAttribute("isMember", true);
                 model.addAttribute("memberName", memberInfo.getName());
-                model.addAttribute("membershipRank", memberInfo.getCode().getRank());
+                model.addAttribute("membershipRank", memberInfo.getCode().getRankName());
             } catch (ClassCastException e) {
                 NonMemberDTO nonmemberInfo = (NonMemberDTO) session.getAttribute("nonmemberInfo");
                 model.addAttribute("isMember", false);
