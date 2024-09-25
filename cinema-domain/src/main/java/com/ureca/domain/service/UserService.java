@@ -5,7 +5,6 @@ import com.ureca.domain.dto.MemberDTO;
 import com.ureca.domain.dto.NonMemberDTO;
 import com.ureca.domain.dto.RegisterDTO;
 import com.ureca.domain.entity.MemberEntity;
-import com.ureca.domain.entity.NonMemberEntity;
 import com.ureca.domain.repository.MemberRepository;
 import com.ureca.domain.repository.NonMemberRepository;
 import java.util.HashSet;
