@@ -3,13 +3,10 @@ package com.ureca.api.controller;
 import com.ureca.domain.dto.KmdbDetailMovieDTO;
 import com.ureca.domain.dto.ResMovieDTO;
 import com.ureca.domain.dto.ResTimeTblInfoDTO;
-import com.ureca.domain.entity.MemberEntity;
-import com.ureca.domain.entity.MovieInfoEntity;
 import com.ureca.domain.service.MovieInfoService;
 import com.ureca.domain.service.MovieRecommendService;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -109,9 +106,9 @@ public class MovieController {
     }
 
     // recommend
-    @ResponseBody
-    @GetMapping("/recommend")
-    public Map<MemberEntity, List<MovieInfoEntity>> recommend() {
-        return movieRecommendService.recommendAlgo();
-    }
+    //    @ResponseBody
+    //    @GetMapping("/recommend")
+    //    public Map<MemberEntity, List<MovieInfoEntity>> recommend() {
+    //        return movieRecommendService.recommendAlgo();
+    //    }
 }
