@@ -21,6 +21,9 @@ public class SeatDTO {
     // 예매 완료 여부
     @NotNull private String rsrvYn;
 
+    // 기본 생성자
+    public SeatDTO() {}
+
     // 생성자
     public SeatDTO(
             String seatId,

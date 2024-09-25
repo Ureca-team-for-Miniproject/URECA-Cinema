@@ -15,6 +15,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TicketService {
@@ -39,11 +40,11 @@ public class TicketService {
     }
 
     // 티켓 발행 처리
-
-    // 1. 예매된 좌석 확인
-    public int checkSeatId(SeatSaveDTO seatDTO) {
+    @Transactional
+    public int setTicketInfo(SeatSaveDTO seatDTO) {
         logger.info("seatDTO { " + seatDTO + " }");
 
+        // 1. 예매된 좌석 확인
         for (SeatDTO seatInfo : seatDTO.getSeatList()) {
             String seatId = seatInfo.getSeatId();
 
@@ -54,12 +55,7 @@ public class TicketService {
                 throw new SeatReservedException(message);
             }
         }
-        int getTicketId = setTicketInfo(seatDTO);
-        return getTicketId;
-    }
 
-    // @Transactional(readOnly = false)
-    public int setTicketInfo(SeatSaveDTO seatDTO) {
         // 2. 티켓 테이블 업데이트
         seatDTO.setSeatNum(seatDTO.getSeatList().size()); // 인원수
 

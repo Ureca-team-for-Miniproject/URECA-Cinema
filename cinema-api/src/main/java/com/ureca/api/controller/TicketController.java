@@ -1,8 +1,10 @@
 package com.ureca.api.controller;
 
 import com.ureca.domain.dto.*;
+import com.ureca.domain.repository.ScreenInfoRepository;
 import com.ureca.domain.service.TicketService;
 import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ public class TicketController {
     private static final Logger logger = LoggerFactory.getLogger(TicketController.class);
 
     private TicketService ticketService;
+    private ScreenInfoRepository screenInfoRepository;
 
     public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
@@ -47,4 +50,33 @@ public class TicketController {
         logger.info("ResTicketDTO 이동 !" + resTicketDTO);
         return "movie/ticket";
     }
+
+    // http://localhost:8080/cinema/seatTest
+    // 티켓 동시성 테스트용 Controller - curl 로 동시에 호출하는 방식 사용
+    @GetMapping("/seatTest")
+    public void submitSeatsTest() {
+
+        // 다수의 사용자가 동시에 접근하는 좌석 지정해주기
+        SeatDTO seatDTO = new SeatDTO();
+        seatDTO.setSeatId("103H5");
+        seatDTO.setSeatRow("H");
+        seatDTO.setSeatCol(5);
+        seatDTO.setSeatType("S");
+        seatDTO.setSeatAmount(11000);
+        seatDTO.setRsrvYn("N");
+        List<SeatDTO> list = new ArrayList<>();
+        list.add(seatDTO);
+
+        SeatSaveDTO seatSaveDTO = new SeatSaveDTO();
+        seatSaveDTO.setSeatList(list);
+        seatSaveDTO.setScrnnId("2D10324091801");
+        seatSaveDTO.setUserId("gildong94@gmail.com");
+        seatSaveDTO.setSeatNum(1);
+        seatSaveDTO.setPymnAmnt(11000);
+        seatSaveDTO.setPymnInfo("카드");
+
+        // 서비스 호출 - 티켓 발행 처리하기
+        String savedTicketId = Integer.toString(ticketService.setTicketInfo(seatSaveDTO));
+        logger.info("신규 발행 티켓번호~!!! : " + savedTicketId);
+    } // submitSeatsTest
 }

@@ -79,7 +79,13 @@
         <div class="ticket-details-text">
             <h2>예매 번호: <span th:text="${ResTicketDTO.ticketId}"></span></h2>
             <h3 th:text="${ResTicketDTO.movieNm}"></h3>
-            <p>관람 등급: <span th:text="${ResTicketDTO.rtngRstrCd}"></span></p>
+            <p>관람 등급:
+                <span th:text="${ResTicketDTO.rtngRstrCd == 'A12' ? '12세이상관람가' :
+                               ResTicketDTO.rtngRstrCd == 'A15' ? '15세이상관람가' :
+                               ResTicketDTO.rtngRstrCd == 'A19' ? '청소년관람불가' :
+                               ResTicketDTO.rtngRstrCd == 'AA' ? '전체관람가' :
+                               '정보 없음'}"></span>
+            </p>
             <p>상영 시작 시간: <span th:text="${#dates.format(ResTicketDTO.startScrnn, 'HH:mm')}"></span></p>
             <p>상영관명: <span th:text="${ResTicketDTO.theaterNm}"></span></p>
         </div>

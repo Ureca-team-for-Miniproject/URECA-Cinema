@@ -111,8 +111,15 @@
 <div class="movie-info">
     <h2 th:text="'영화명: ' + ${ResSeatDTO.movieNm}"></h2>
     <h3 th:text="'상영관: ' + ${ResSeatDTO.theaterNm}"></h3>
-    <h3 th:text="'상영방식: ' + ${ResSeatDTO.theaterCd}"></h3>
-    <h3 th:text="'사용자 적립금: ' + ${ResSeatDTO.useAcmltCnt} + '원'"></h3>
+    <h3>상영방식:
+        <span th:if="${ResSeatDTO.theaterCd == 'S2'}">2D</span>
+        <span th:if="${ResSeatDTO.theaterCd == 'S3'}">3D</span>
+        <span th:if="${ResSeatDTO.theaterCd == 'S4'}">4DX</span>
+        <span th:if="${ResSeatDTO.theaterCd == 'SX'}">SCREENX</span>
+        <span th:if="${ResSeatDTO.theaterCd != 'S2' && ResSeatDTO.theaterCd != 'S3' && ResSeatDTO.theaterCd != 'S4' && ResSeatDTO.theaterCd != 'SX'}">
+        [[${ResSeatDTO.theaterCd}]]
+    </span>
+    </h3>
 </div>
 
 <!-- 인원 수 선택 -->
@@ -181,6 +188,7 @@
 <!-- 적립금 사용 여부 및 금액 입력 -->
 <div class="selected-seats">
     <h2>적립금 사용</h2>
+    <h3 th:text="'사용자 적립금: ' + ${ResSeatDTO.useAcmltCnt} + '원'"></h3>
     <label>
         <input type="checkbox" id="usePoints"> 적립금 사용
     </label>
@@ -321,7 +329,7 @@
 
             const discountedPrice = Math.max(totalPrice - pointsUsed, 0);
 
-            const confirmMessage = `선택한 좌석:\n\n${seatListText}<br/><br/><strong>총 합계: ${totalPrice.toLocaleString()}원</strong><br/><strong>적립금 사용: ${pointsUsed.toLocaleString()}원</strong><br/><strong>할인된 총 합계: ${discountedPrice.toLocaleString()}원</strong><br/><br/>정말 좌석 선택을 완료하시겠습니까?`;
+            const confirmMessage = `선택한 좌석: ${seatListText} 총 합계: ${totalPrice.toLocaleString()}원 적립금 사용: ${pointsUsed.toLocaleString()}원 할인된 총 합계: ${discountedPrice.toLocaleString()}원 정말 좌석 선택을 완료하시겠습니까?`;
 
             if (confirm(confirmMessage)) {
                 const seatData = selectedSeats.map(seatIdentifier => {
