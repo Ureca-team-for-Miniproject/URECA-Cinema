@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>My Page</title>
+</head>
+<body>
+<h1>My Page</h1>
+
+<div th:if="${isMember}">
+    <p>안녕하세요 <span th:text="${memberName}"></span>님!</p>
+    <p>멤버십 등급: <span th:text="${membershipRank}"></span></p>
+</div>
+
+<div th:unless="${isMember}">
+    <p>안녕하세요 <span th:text="${nonmemberName}"></span>님!</p>
+</div>
+</body>
+</html>

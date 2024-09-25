@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cinema")
 @Controller
 @AllArgsConstructor
+@SessionAttributes("nonmemberInfo") // ==> 해당 Controller 안에서 orderForm이라는 이름으로
 public class AuthController {
 
     private UserService loginService;
@@ -34,13 +35,17 @@ public class AuthController {
     @PostMapping("/login/nonmember")
     public String nonmemberLogin(
             @ModelAttribute @Valid NonMemberRequest nonMember,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Model model) {
         try {
+            // 비회원 로그인 처리
             loginService.nonMemberLogin(nonMember.toDto());
+            model.addAttribute("nonmemberInfo", nonMember.toDto()); // 세션에 저장
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", "오류가 발생했습니다. 다시 시도해주세요.");
-            return "redirect:nonmember";
+            return "redirect:/nonmember";
         }
+
         return "redirect:/cinema/home";
     }
 }
