@@ -1,9 +1,11 @@
 package com.ureca.domain.service;
 
 import com.ureca.common.model.Role;
+import com.ureca.domain.dto.MemberDTO;
 import com.ureca.domain.dto.NonMemberDTO;
 import com.ureca.domain.dto.RegisterDTO;
 import com.ureca.domain.entity.MemberEntity;
+import com.ureca.domain.entity.NonMemberEntity;
 import com.ureca.domain.repository.MemberRepository;
 import com.ureca.domain.repository.NonMemberRepository;
 import java.util.HashSet;
@@ -66,5 +68,15 @@ public class UserService implements UserDetailsService {
                     .build();
         }
         throw new UsernameNotFoundException("유저를 찾을 수 없습니다.");
+    }
+
+    public MemberDTO getMemberInfo(String userId) {
+        Optional<MemberEntity> memberOption = memberRepository.findById(userId);
+        if (memberOption.isPresent()) {
+            MemberEntity memberEntity = memberOption.get();
+            return memberEntity.toDTO();
+        }
+
+        return null;
     }
 }
