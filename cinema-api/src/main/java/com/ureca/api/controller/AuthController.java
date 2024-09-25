@@ -41,8 +41,6 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("message", "오류가 발생했습니다. 다시 시도해주세요.");
             return "redirect:nonmember";
         }
-
-        // TODO: 향후 비회원 로그인 이후 이동할 페이지 설정
-        return "redirect:home";
+        return "redirect:/cinema/home";
     }
 }
