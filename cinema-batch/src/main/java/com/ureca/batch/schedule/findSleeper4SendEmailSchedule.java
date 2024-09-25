@@ -26,7 +26,7 @@ public class findSleeper4SendEmailSchedule {
     private final findSleeperMemberBatch findSleeperMemberBatch;
     private final MovieRecommendService movieRecommendService;
 
-    @Scheduled(cron = "10 * * * * ?", zone = "Asia/Seoul") // 매일 오전 10시에 실행
+    @Scheduled(cron = "0 0 10 * * ?", zone = "Asia/Seoul") // 매일 오전 10시에 실행
     public void sendEmailToSleeperMembers() throws Exception {
         System.out.println("updateMemberRank schedule start");
 
