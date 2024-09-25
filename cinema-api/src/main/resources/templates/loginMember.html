@@ -1,7 +1,88 @@
-<form th:action="@{/cinema/login/member}" method="post" name="/cinema/login/member">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Pretendard-Regular';
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 400px;
+            margin-top: 30px;
+        }
+
+        form {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        input {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        input:focus {
+            border-color: #F2059F;
+            box-shadow: 0 0 5px rgba(242, 5, 159, 0.5);
+        }
+
+        .btn-outline-secondary {
+            background-color: #F2059F;
+            border: none;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #343a40;
+            color: #F2059F;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--main-color);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<!-- 네비게이션 -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="home">URECA CINEMA</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/cinema/login/member">로그인</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cinema/login/nonmember">비회원 로그인</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cinema/join">회원가입</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cinema/mypage">마이페이지</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cinema/anonymous-mypage">비회원 마이페이지</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- 로그인 -->
+<h2>로그인</h2>
+<form class="container" th:action="@{/cinema/login/member}" method="post" name="/cinema/login/member">
     <div class="top">
-        <input type="email" class="form-control mb-1 p-3" name="email" id="email" placeholder="이메일을 입력해주세요."/>
-        <input type="password" class="form-control mb-1 p-3" name="password" id="password" placeholder="비밀번호를 입력해주세요"/>
+        <input type="email" class="form-control mb-3 p-3" name="email" id="email" placeholder="이메일을 입력해주세요." required/>
+        <input type="password" class="form-control mb-3 p-3" name="password" id="password" placeholder="비밀번호를 입력해주세요"
+               required/>
     </div>
 
     <script th:if="${param.error}">
@@ -9,6 +90,13 @@
     </script>
 
     <div class="middle d-flex flex-column">
-        <button type="submit">로그인</button>
+        <button type="submit" class="btn btn-block btn-outline-secondary">로그인</button>
     </div>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
