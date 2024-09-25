@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation project(':cinema-common')
     implementation project(':cinema-domain')
+    implementation project(':cinema-external')
 
     // spring batch
     implementation 'org.springframework.boot:spring-boot-starter-batch'

@@ -17,7 +17,7 @@ public class updateMemberRankSchedule {
     private final JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
-    @Scheduled(cron = "0 0 0 1 * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 0 1 * ?", zone = "Asia/Seoul")
     public void runUpdateMemberRankJob() throws Exception {
 
         System.out.println("updateMemberRank schedule start");
