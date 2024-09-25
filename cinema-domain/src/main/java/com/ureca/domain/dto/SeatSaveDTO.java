@@ -25,6 +25,9 @@ public class SeatSaveDTO {
     // 예매 좌석 목록 (좌석 아이디만 있음 SeatDTO-seatId)
     @NotNull private List<SeatDTO> seatList;
 
+    // 기본 생성자
+    public SeatSaveDTO() {}
+
     // 생성자
     public SeatSaveDTO(String scrnnId, String userId, int seatNum, String pymnInfo, int pymnAmnt) {
         this.scrnnId = scrnnId;

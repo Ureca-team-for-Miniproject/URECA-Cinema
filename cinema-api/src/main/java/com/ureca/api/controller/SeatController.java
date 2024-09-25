@@ -35,9 +35,9 @@ public class SeatController {
     @GetMapping("/seat")
     public String seatView(Model model, String scrnnId, String theaterId, String movieId) {
         // public String seatView(Model model) {
-        // String movieId = "GDRA240807001";       //영화 아이디
-        // String theaterId = "103";               //상영관 아이디
-        // String scrnnId = "2D10324091801";       //상영 아이디
+        //    String movieId = "GDRA240807001"; // 영화 아이디
+        //    String theaterId = "103"; // 상영관 아이디
+        //    String scrnnId = "2D10324091801"; // 상영 아이디
 
         // TODO 사용자 아이디 테스트 요청값
         String userId = "gildong94@gmail.com"; // 예매자 아이디
@@ -99,7 +99,7 @@ public class SeatController {
         seatDTO.setPymnInfo(pymnInfo);
 
         // 서비스 호출 - 티켓 발행 처리하기
-        String savedTicketId = Integer.toString(ticketService.checkSeatId(seatDTO));
+        String savedTicketId = Integer.toString(ticketService.setTicketInfo(seatDTO));
         logger.info("신규 발행 티켓번호 : " + savedTicketId);
 
         // 성공적으로 발행된 경우, ticketId를 반환
