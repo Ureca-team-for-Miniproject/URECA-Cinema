@@ -5,8 +5,10 @@ import com.ureca.domain.entity.MembershipRankEntity;
 import java.util.Date;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
+@Getter
 public class MemberDTO {
     private String id;
     private String password;
