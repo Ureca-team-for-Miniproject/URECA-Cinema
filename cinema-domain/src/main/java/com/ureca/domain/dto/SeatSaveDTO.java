@@ -12,6 +12,8 @@ public class SeatSaveDTO {
 
     // 상영 아이디
     @NotNull private String scrnnId;
+    // 상영관 아이디
+    @NotNull private String theaterId;
     // 예매자 아이디
     @NotNull private String userId;
     // 인원수
@@ -29,8 +31,15 @@ public class SeatSaveDTO {
     public SeatSaveDTO() {}
 
     // 생성자
-    public SeatSaveDTO(String scrnnId, String userId, int seatNum, String pymnInfo, int pymnAmnt) {
+    public SeatSaveDTO(
+            String scrnnId,
+            String theaterId,
+            String userId,
+            int seatNum,
+            String pymnInfo,
+            int pymnAmnt) {
         this.scrnnId = scrnnId;
+        this.theaterId = theaterId;
         this.userId = userId;
         this.seatNum = seatNum;
         this.pymnInfo = pymnInfo;

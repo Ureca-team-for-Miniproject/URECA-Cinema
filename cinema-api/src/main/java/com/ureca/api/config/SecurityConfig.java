@@ -30,7 +30,10 @@ public class SecurityConfig {
                                         .csrfTokenRepository(
                                                 CookieCsrfTokenRepository.withHttpOnlyFalse())
                                         .ignoringRequestMatchers(
-                                                "/cinema/home", "/cinema/login/**", "/cinema/join"))
+                                                "/cinema/home",
+                                                "/cinema/login/**",
+                                                "/cinema/join",
+                                                "/cinema/submitSeats"))
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) ->
                                 authorizeHttpRequests

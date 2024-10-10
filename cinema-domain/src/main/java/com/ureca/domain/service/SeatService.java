@@ -39,6 +39,10 @@ public class SeatService {
             resSeatDTO.setTotalSeatCnt(seatList.size());
             resSeatDTO.setColSeatCnt(12); // 열 길이 고정
             resSeatDTO.setRowSeatCnt(seatList.size() / 12);
+
+            // 3. 기본 정보 세팅
+            resSeatDTO.setTheaterId(reqSeatDTO.getTheaterId()); // 상영관 아이디
+            resSeatDTO.setScrnnId(reqSeatDTO.getScrnnId()); // 상영 아이디
         }
 
         logger.info("resSeatDTO { " + resSeatDTO + " }");
