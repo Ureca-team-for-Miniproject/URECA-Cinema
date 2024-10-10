@@ -3,12 +3,16 @@ package com.ureca.api.controller;
 import com.ureca.domain.dto.*;
 import com.ureca.domain.service.SeatService;
 import com.ureca.domain.service.TicketService;
+import com.ureca.domain.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,23 +28,24 @@ public class SeatController {
 
     private SeatService seatService;
     private TicketService ticketService;
+    private UserService userService;
 
-    public SeatController(SeatService seatService, TicketService ticketService) {
+    public SeatController(
+            SeatService seatService, TicketService ticketService, UserService userService) {
         this.seatService = seatService;
         this.ticketService = ticketService;
+        this.userService = userService;
     }
 
     // http://localhost:8080/cinema/seat
     // 상영 스케줄 클릭 시 좌석 선택 화면으로 이동
     @GetMapping("/seat")
-    public String seatView(Model model, String scrnnId, String theaterId, String movieId) {
-        // public String seatView(Model model) {
-        //    String movieId = "GDRA240807001"; // 영화 아이디
-        //    String theaterId = "103"; // 상영관 아이디
-        //    String scrnnId = "2D10324091801"; // 상영 아이디
-
-        // TODO 사용자 아이디 테스트 요청값
-        String userId = "gildong94@gmail.com"; // 예매자 아이디
+    public String seatView(
+            HttpSession session, Model model, String scrnnId, String theaterId, String movieId) {
+        // 사용자 정보 가져오기
+        String userId = "";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) userId = auth.getName();
 
         ReqSeatDTO reqSeatDTO = new ReqSeatDTO();
         reqSeatDTO.setUserId(userId);
@@ -60,13 +65,15 @@ public class SeatController {
     // 좌석 선택 완료 버튼 클릭 시 티켓 발행
     @PostMapping("/submitSeats")
     public ResponseEntity<Map<String, Object>> submitSeats(
-            Model model, @RequestBody SeatSaveDTO seatDTO) {
+            HttpSession session, Model model, @RequestBody SeatSaveDTO seatDTO) {
 
-        // 화면에서 전달 받은 예매 좌석 정보
+        // TODO (프론트) 개인 적립금 이상은 사용하지 못하도록 설정하는 로직 작성하기
+        //      (백엔드) 화면에서 사용한 적립금 DB에서 차감하는 로직 작성하기
         int useAcmltCnt = seatDTO.getUseAcmltCnt(); // 사용적립금
         int pymnAmnt = seatDTO.getPymnAmnt(); // 결제 금액
         logger.info("사용한 적립금:" + useAcmltCnt + " 최종 결제 금액 : " + pymnAmnt);
 
+        // 화면에서 전달받은 좌석 정보 좌석아이디 형태로 매핑
         List<SeatDTO> seatList = seatDTO.getSeatList();
         logger.info("받은 좌석 데이터:");
         seatList.forEach(
@@ -80,20 +87,21 @@ public class SeatController {
                                         + seat.getSeatCol()
                                         + ", Type: "
                                         + seat.getSeatType()));
-        // TODO 화면에서 좌석 데이터 전달 시 좌석 아이디 제대로 넘겨 받는 방식으로 수정 (프론트)
-        String theaterId = "103"; // 상영관 아이디
+        String theaterId = seatDTO.getTheaterId(); // 상영관 아이디
         seatList.forEach(
                 seat -> {
                     String seatId = theaterId + seat.getSeatId();
                     seat.setSeatId(seatId); // Update seat type
                 });
 
-        // TODO 사용자 아이디 테스트 요청값
-        String userId = "gildong94@gmail.com"; // 예매자 아이디
-        // TODO api 호출 시 scrnnId 전달받는 방식으로 수정 (프론트)
-        String scrnnId = "2D10324091801"; // 상영 아이디
+        String userId = ""; // 사용자 아이디
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) userId = auth.getName();
 
-        String pymnInfo = "카드"; // 결제정보 (예매 완료 시 자동 결제 처리)
+        String scrnnId = seatDTO.getScrnnId(); // 상영 아이디
+
+        String pymnInfo = "카드";
+
         seatDTO.setUserId(userId);
         seatDTO.setScrnnId(scrnnId);
         seatDTO.setPymnInfo(pymnInfo);

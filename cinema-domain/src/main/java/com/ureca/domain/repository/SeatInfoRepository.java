@@ -15,13 +15,12 @@ public interface SeatInfoRepository extends JpaRepository<SeatInfoEntity, String
     // 단건 조회 - 상영 정보 조회
     @Query(
             "SELECT new com.ureca.domain.dto.ResSeatDTO(b.movieNm, c.theaterNm, c.theaterCd, "
+                    + "a.scrnnId, c.theaterId, "
                     + "(SELECT m.acmltCnt FROM MemberEntity m WHERE m.id = :userId)) "
                     + "FROM ScreenInfoEntity a "
-                    + "JOIN a.movieId b "
-                    + // MovieInfoEntity (ScreenInfoEntity-movieId)
-                    "JOIN a.theaterId c "
-                    + // TheaterInfoEntity (ScreenInfoEntity-theaterId)
-                    "WHERE a.scrnnId = :scrnnId "
+                    + "JOIN a.movieId b " // MovieInfoEntity (ScreenInfoEntity-movieId)
+                    + "JOIN a.theaterId c " // TheaterInfoEntity (ScreenInfoEntity-theaterId)
+                    + "WHERE a.scrnnId = :scrnnId "
                     + "AND b.movieId = :movieId "
                     + "AND c.theaterId = :theaterId")
     ResSeatDTO findSeatInfo(

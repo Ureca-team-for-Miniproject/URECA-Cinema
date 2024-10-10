@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>영화 상영관 좌석 선택</title>
@@ -201,13 +202,18 @@
 <!-- 좌석 선택 완료 버튼 -->
 <button class="confirm-button" id="confirmSeats" onclick="confirmSeats()" disabled>좌석 선택 완료</button>
 
-<script>
+<script th:inline="javascript">
     let selectedSeats = [];
     let maxSeats = 0;
     let pointsUsed = 0;
-    const MAX_POINTS = 5000;
 
-    // 좌석 가격 정의 TODO 변경
+    // 서버에서 전달받은 정보
+    var resSeatDTO = [[${ResSeatDTO}]];
+
+    // 사용자 적립금
+    const MAX_POINTS = resSeatDTO.useAcmltCnt;
+
+    // 좌석 가격 정의 TODO seatList 정보로 변경하기
     const seatPrices = {
         'S': 11000,
         'R': 9000,
@@ -347,7 +353,9 @@
                 const seatSaveDTO = {
                     seatList: seatData,
                     useAcmltCnt: pointsUsed,
-                    pymnAmnt: discountedPrice
+                    pymnAmnt: discountedPrice,
+                    theaterId: resSeatDTO.theaterId,
+                    scrnnId: resSeatDTO.scrnnId
                 };
 
                 fetch('http://localhost:8080/cinema/submitSeats', {
